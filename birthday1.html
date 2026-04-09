@@ -1,0 +1,858 @@
+\<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khendi 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Montserrat:wght@300;600&family=Pacifico&family=Sacramento&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden}
+
+/* ====== SLIDE WRAPPER ====== */
+#app{position:fixed;inset:0;overflow:hidden}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:30px 20px;text-align:center;
+  opacity:0;pointer-events:none;
+  transition:opacity 1s ease,transform 1s ease;
+  transform:translateY(30px);
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0)}
+.slide.exit{opacity:0;transform:translateY(-30px)}
+
+/* ====== PROGRESS BAR ====== */
+#progress-bar{
+  position:fixed;bottom:0;left:0;height:4px;
+  background:linear-gradient(90deg,#ff6b9d,#ffca3a,#6bcb77,#4d96ff);
+  z-index:100;transition:width 0.3s linear;
+  box-shadow:0 0 12px rgba(255,107,157,0.8);
+}
+
+/* ====== DOTS ====== */
+#dots{
+  position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  display:flex;gap:8px;z-index:100;
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  border:1px solid rgba(255,255,255,0.4);
+  cursor:pointer;transition:all 0.4s;
+}
+.dot.active{background:#fff;transform:scale(1.5);box-shadow:0 0 8px #fff}
+
+/* ====== TYPING ====== */
+.typing-line{
+  overflow:hidden;white-space:nowrap;
+  border-right:2px solid;
+  width:0;
+  animation:typeIn var(--td,2s) steps(var(--st,30),end) var(--del,0s) forwards,
+            blink 0.8s step-end var(--del,0s) 5;
+}
+.typing-line.done{border-right-color:transparent;width:auto}
+@keyframes typeIn{to{width:100%}}
+@keyframes blink{0%,100%{border-color:currentColor}50%{border-color:transparent}}
+
+/* ====== SHARED DECORATIONS ====== */
+canvas.particle-canvas{position:fixed;inset:0;pointer-events:none;z-index:2}
+
+/* ==============================
+   SLIDE 0 — DEEP ROSE NIGHT
+   ============================== */
+#s0{
+  background:radial-gradient(ellipse at 30% 40%,#2d0020 0%,#0a000f 70%);
+  z-index:10;
+}
+#s0 .s0-name{
+  font-family:'Sacramento',cursive;
+  font-size:clamp(4rem,14vw,9rem);
+  color:#fff;
+  filter:drop-shadow(0 0 30px #ff1493) drop-shadow(0 0 60px #c71585);
+  animation:nameGlow 3s ease-in-out infinite;
+  line-height:1;margin-bottom:20px;
+}
+@keyframes nameGlow{
+  0%,100%{filter:drop-shadow(0 0 20px #ff1493) drop-shadow(0 0 50px #c71585)}
+  50%{filter:drop-shadow(0 0 50px #ff69b4) drop-shadow(0 0 100px #ff1493) drop-shadow(0 0 150px #ff69b4)}
+}
+#s0 .s0-sub{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1.1rem,3vw,1.8rem);
+  color:#ffb6d9;letter-spacing:3px;
+  animation:fadeSlideUp 1.5s 0.5s both;
+}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.petal{
+  position:fixed;font-size:1.4rem;
+  animation:petalFall linear infinite;
+  z-index:3;opacity:0;
+}
+@keyframes petalFall{
+  0%{transform:translateY(-60px) rotate(0deg);opacity:0}
+  10%{opacity:1}
+  90%{opacity:1}
+  100%{transform:translateY(105vh) rotate(540deg) translateX(60px);opacity:0}
+}
+
+/* ==============================
+   SLIDE 1 — GOLDEN BIRTHDAY
+   ============================== */
+#s1{
+  background:radial-gradient(ellipse at 50% 60%,#1a0a00 0%,#0d0500 100%);
+}
+#s1 .s1-title{
+  font-family:'Pacifico',cursive;
+  font-size:clamp(2rem,7vw,4.5rem);
+  background:linear-gradient(135deg,#ffca3a,#ff9f43,#f9ca24,#f0932b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(255,200,0,0.6));
+  animation:goldShimmer 2s ease-in-out infinite;
+  margin-bottom:10px;
+}
+@keyframes goldShimmer{
+  0%,100%{filter:drop-shadow(0 0 15px rgba(255,200,0,0.5))}
+  50%{filter:drop-shadow(0 0 35px rgba(255,200,0,1)) drop-shadow(0 0 60px rgba(255,150,0,0.8))}
+}
+#s1 .cake-wrap{margin:15px auto;position:relative;width:180px}
+.candle-flame{animation:flicker 0.3s ease-in-out infinite alternate}
+@keyframes flicker{from{transform:scaleY(1) scaleX(1)}to{transform:scaleY(1.2) scaleX(0.85) translateY(-3px)}}
+#s1 .s1-wish{
+  font-family:'Montserrat',sans-serif;font-weight:300;
+  font-size:clamp(0.9rem,2.5vw,1.3rem);
+  color:#ffe0a0;letter-spacing:1px;line-height:1.8;
+  max-width:600px;margin-top:10px;
+}
+.sparkle{
+  position:fixed;z-index:5;font-size:1.2rem;
+  animation:sparklePop ease-out forwards;
+  pointer-events:none;
+}
+@keyframes sparklePop{
+  0%{opacity:1;transform:scale(0)}
+  50%{opacity:1;transform:scale(1.3)}
+  100%{opacity:0;transform:scale(0.5) translateY(-40px)}
+}
+
+/* ==============================
+   SLIDE 2 — OCEAN LOVE LETTER
+   ============================== */
+#s2{
+  background:linear-gradient(160deg,#000d1a 0%,#001a2e 50%,#000810 100%);
+}
+#s2 .s2-envelope{
+  font-size:5rem;
+  animation:envelopeBounce 2s ease-in-out infinite;
+  filter:drop-shadow(0 0 20px #4d96ff);
+  margin-bottom:10px;
+}
+@keyframes envelopeBounce{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-15px) rotate(3deg)}
+}
+#s2 .s2-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.5rem,5vw,3rem);
+  color:#7ecfff;
+  text-shadow:0 0 30px #4d96ff,0 0 60px #0066cc;
+  margin-bottom:14px;
+  animation:waveText 3s ease-in-out infinite;
+}
+@keyframes waveText{
+  0%,100%{text-shadow:0 0 20px #4d96ff}
+  50%{text-shadow:0 0 50px #00aaff,0 0 100px #4d96ff}
+}
+#s2 .s2-poem{
+  font-family:'Dancing Script',cursive;
+  font-size:clamp(1rem,3vw,1.6rem);
+  color:#b8e4ff;
+  line-height:2;max-width:620px;
+}
+.bubble{
+  position:fixed;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgba(100,200,255,0.3),rgba(0,100,200,0.05));
+  border:1px solid rgba(100,200,255,0.2);
+  animation:bubbleRise linear infinite;z-index:3;
+}
+@keyframes bubbleRise{
+  0%{transform:translateY(100vh);opacity:0}
+  10%{opacity:1}
+  90%{opacity:0.7}
+  100%{transform:translateY(-100px);opacity:0}
+}
+
+/* ==============================
+   SLIDE 3 — NEON GALAXY
+   ============================== */
+#s3{
+  background:radial-gradient(ellipse at 70% 30%,#0d0030 0%,#000015 100%);
+}
+#s3 .s3-planet{
+  font-size:4.5rem;
+  animation:orbit 4s ease-in-out infinite;
+  margin-bottom:5px;
+  filter:drop-shadow(0 0 25px #c77dff);
+}
+@keyframes orbit{
+  0%,100%{transform:translateX(0) rotate(0deg)}
+  25%{transform:translateX(15px) rotate(5deg)}
+  75%{transform:translateX(-15px) rotate(-5deg)}
+}
+#s3 .s3-title{
+  font-family:'Dancing Script',cursive;font-weight:700;
+  font-size:clamp(2rem,7vw,4.5rem);
+  background:linear-gradient(90deg,#c77dff,#ff6b9d,#4d96ff,#74efc9);
+  background-size:200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:rainbow 3s linear infinite;
+}
+@keyframes rainbow{to{background-position:200% center}}
+#s3 .s3-text{
+  font-family:'Montserrat',sans-serif;font-weight:300;
+  font-size:clamp(0.9rem,2.5vw,1.2rem);
+  color:#d4b5ff;line-height:1.9;max-width:580px;margin-top:12px;
+  letter-spacing:0.5px;
+}
+.meteor{
+  position:fixed;height:2px;
+  background:linear-gradient(90deg,transparent,#fff,transparent);
+  animation:meteorFall linear forwards;z-index:3;
+}
+@keyframes meteorFall{
+  from{transform:translateX(-100px) translateY(0);opacity:1}
+  to{transform:translateX(300px) translateY(200px);opacity:0}
+}
+
+/* ==============================
+   SLIDE 4 — CHERRY BLOSSOM
+   ============================== */
+#s4{
+  background:linear-gradient(180deg,#1a0010 0%,#2d0020 40%,#120008 100%);
+}
+#s4 .s4-top{
+  font-family:'Pacifico',cursive;
+  font-size:clamp(1.8rem,6vw,3.5rem);
+  color:#ffb3c6;
+  text-shadow:0 0 20px #ff6b9d,0 0 40px #ff1493;
+  margin-bottom:10px;
+  animation:heartbeat 1.2s ease-in-out infinite;
+}
+@keyframes heartbeat{
+  0%,100%{transform:scale(1)}
+  14%{transform:scale(1.08)}
+  28%{transform:scale(1)}
+  42%{transform:scale(1.05)}
+  70%{transform:scale(1)}
+}
+#s4 .s4-poem{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1rem,3vw,1.55rem);
+  color:#ffd6e7;line-height:2.1;max-width:640px;
+  text-shadow:0 2px 15px rgba(255,100,150,0.4);
+}
+.sakura{
+  position:fixed;font-size:1.5rem;z-index:3;
+  animation:sakuraFall linear infinite;
+}
+@keyframes sakuraFall{
+  0%{transform:translateY(-50px) rotate(0deg) translateX(0);opacity:0}
+  5%{opacity:1}
+  95%{opacity:1}
+  100%{transform:translateY(105vh) rotate(960deg) translateX(var(--sx,40px));opacity:0}
+}
+
+/* ==============================
+   SLIDE 5 — EMERALD FOREST
+   ============================== */
+#s5{
+  background:radial-gradient(ellipse at 40% 60%,#001a0a 0%,#000d05 100%);
+}
+#s5 .s5-icon{font-size:4rem;animation:sway 3s ease-in-out infinite;margin-bottom:8px;filter:drop-shadow(0 0 20px #6bcb77)}
+@keyframes sway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+#s5 .s5-title{
+  font-family:'Dancing Script',cursive;font-weight:700;
+  font-size:clamp(2rem,6vw,4rem);
+  color:#a8ff78;
+  text-shadow:0 0 20px #6bcb77,0 0 50px #00c851;
+  margin-bottom:12px;
+}
+#s5 .s5-text{
+  font-family:'Montserrat',sans-serif;font-weight:300;
+  font-size:clamp(0.9rem,2.5vw,1.3rem);
+  color:#c8ffc8;line-height:1.9;max-width:600px;
+  letter-spacing:0.3px;
+}
+.leaf-float{
+  position:fixed;font-size:1.4rem;z-index:3;
+  animation:leafDrift linear infinite;
+}
+@keyframes leafDrift{
+  0%{transform:translateY(-40px) rotate(0deg);opacity:0}
+  8%{opacity:1}
+  92%{opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) translateX(var(--lx,30px));opacity:0}
+}
+
+/* ==============================
+   SLIDE 6 — SUNSET PARADISE
+   ============================== */
+#s6{
+  background:linear-gradient(180deg,#1a0500 0%,#3d0f00 30%,#1a0000 100%);
+}
+#s6 .s6-sun{font-size:5rem;animation:sunPulse 2s ease-in-out infinite;margin-bottom:8px}
+@keyframes sunPulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 20px #ffca3a)}50%{transform:scale(1.1);filter:drop-shadow(0 0 50px #ff9f43) drop-shadow(0 0 80px #ffca3a)}}
+#s6 .s6-title{
+  font-family:'Pacifico',cursive;
+  font-size:clamp(1.8rem,5.5vw,3.5rem);
+  background:linear-gradient(90deg,#ffca3a,#ff6b35,#ff1744);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px;
+  filter:drop-shadow(0 0 15px rgba(255,150,0,0.5));
+}
+#s6 .s6-text{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1rem,2.8vw,1.5rem);
+  color:#ffd0a0;line-height:2;max-width:620px;
+}
+.firefly{
+  position:fixed;width:4px;height:4px;border-radius:50%;
+  background:#ffca3a;z-index:3;
+  animation:fireflyMove ease-in-out infinite alternate;
+  box-shadow:0 0 6px #ffca3a,0 0 12px #ff9f43;
+}
+@keyframes fireflyMove{
+  0%{transform:translate(0,0);opacity:0.2}
+  50%{opacity:1}
+  100%{transform:translate(var(--fx,40px),var(--fy,-60px));opacity:0.3}
+}
+
+/* ==============================
+   SLIDE 7 — FINAL LOVE FOREVER
+   ============================== */
+#s7{
+  background:radial-gradient(ellipse at 50% 50%,#1f0020 0%,#0a0010 100%);
+}
+#s7 .s7-heart{
+  font-size:clamp(4rem,12vw,8rem);
+  animation:bigHeartbeat 1s ease-in-out infinite;
+  filter:drop-shadow(0 0 30px #ff1493) drop-shadow(0 0 60px #c71585);
+}
+@keyframes bigHeartbeat{
+  0%,100%{transform:scale(1)}
+  14%{transform:scale(1.12)}
+  28%{transform:scale(0.97)}
+  42%{transform:scale(1.08)}
+  70%{transform:scale(1)}
+}
+#s7 .s7-name{
+  font-family:'Sacramento',cursive;
+  font-size:clamp(3rem,10vw,7rem);
+  color:#fff;
+  filter:drop-shadow(0 0 30px #ff69b4);
+  animation:nameGlow 3s ease-in-out infinite;
+  margin:5px 0;
+}
+#s7 .s7-forever{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1.1rem,3.5vw,2rem);
+  color:#ffb6d9;
+  letter-spacing:4px;text-transform:uppercase;
+  animation:fadeSlideUp 1.5s 0.5s both;
+  margin-top:10px;
+}
+#s7 .s7-sign{
+  font-family:'Dancing Script',cursive;
+  font-size:clamp(0.9rem,2.5vw,1.3rem);
+  color:#ff9dcc;
+  margin-top:20px;opacity:0.8;
+  animation:fadeSlideUp 1.5s 1.5s both;
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- particle layers -->
+  <canvas class="particle-canvas" id="bgCanvas"></canvas>
+  <canvas class="particle-canvas" id="fxCanvas" style="z-index:4"></canvas>
+
+  <!-- SLIDE 0: Deep Rose Night -->
+  <div class="slide active" id="s0">
+    <div class="s0-name">Khendi</div>
+    <div class="s0-sub typing-line" style="--td:3s;--st:35;--del:0.8s">
+      ✨ Amar Deoa Name ta Tomar j Ato Valo lagbe ta Vabini✨
+    </div>
+  </div>
+
+  <!-- SLIDE 1: Golden Birthday -->
+  <div class="slide" id="s1">
+    <div class="s1-title">Happy Birthday!</div>
+    <div class="cake-wrap">
+      <svg viewBox="0 0 200 190" width="180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="cg1" cx="50%" cy="40%"><stop offset="0%" stop-color="#ff9f43"/><stop offset="100%" stop-color="#e55039"/></radialGradient>
+          <radialGradient id="cg2" cx="50%" cy="40%"><stop offset="0%" stop-color="#f9ca24"/><stop offset="100%" stop-color="#f0932b"/></radialGradient>
+        </defs>
+        <ellipse cx="100" cy="175" rx="85" ry="13" fill="rgba(0,0,0,0.3)"/>
+        <!-- base tier -->
+        <rect x="15" y="115" width="170" height="55" rx="10" fill="url(#cg1)"/>
+        <rect x="15" y="115" width="170" height="15" rx="5" fill="#ffeca0"/>
+        <!-- drips -->
+        <ellipse cx="40" cy="115" rx="12" ry="7" fill="#fffde7"/><ellipse cx="80" cy="117" rx="10" ry="7" fill="#fffde7"/><ellipse cx="120" cy="116" rx="11" ry="7" fill="#fffde7"/><ellipse cx="162" cy="115" rx="11" ry="7" fill="#fffde7"/>
+        <!-- mid tier -->
+        <rect x="32" y="73" width="136" height="45" rx="8" fill="url(#cg2)"/>
+        <rect x="32" y="73" width="136" height="12" rx="4" fill="#ffe082"/>
+        <ellipse cx="60" cy="73" rx="9" ry="6" fill="#fffde7"/><ellipse cx="100" cy="73" rx="9" ry="6" fill="#fffde7"/><ellipse cx="140" cy="73" rx="9" ry="6" fill="#fffde7"/>
+        <!-- top tier -->
+        <rect x="55" y="40" width="90" height="35" rx="8" fill="#f9ca24"/>
+        <rect x="55" y="40" width="90" height="10" rx="4" fill="#ffe082"/>
+        <!-- candles -->
+        <rect x="72" y="12" width="9" height="30" rx="3" fill="#ff6b9d"/><rect x="95" y="8" width="9" height="34" rx="3" fill="#74efc9"/><rect x="118" y="12" width="9" height="30" rx="3" fill="#a29bfe"/>
+        <!-- flames -->
+        <g class="candle-flame"><ellipse cx="76" cy="9" rx="5" ry="9" fill="#ffdd00"/><ellipse cx="76" cy="8" rx="3" ry="6" fill="#fff7" opacity="0.6"/></g>
+        <g class="candle-flame" style="animation-delay:0.1s"><ellipse cx="99" cy="5" rx="5" ry="9" fill="#ff9900"/><ellipse cx="99" cy="4" rx="3" ry="6" fill="#fff7" opacity="0.6"/></g>
+        <g class="candle-flame" style="animation-delay:0.2s"><ellipse cx="122" cy="9" rx="5" ry="9" fill="#ff5e5e"/><ellipse cx="122" cy="8" rx="3" ry="6" fill="#fff7" opacity="0.6"/></g>
+        <!-- decos -->
+        <circle cx="50" cy="140" r="6" fill="#ffe066"/><circle cx="100" cy="143" r="6" fill="#74efc9"/><circle cx="150" cy="140" r="6" fill="#ff9dcc"/>
+        <circle cx="75" cy="90" r="5" fill="#ffe066"/><circle cx="125" cy="90" r="5" fill="#ff9dcc"/>
+        <!-- stars -->
+        <text x="30" y="100" font-size="12" fill="#fff" opacity="0.6">★</text><text x="160" y="98" font-size="12" fill="#fff" opacity="0.6">★</text>
+      </svg>
+    </div>
+    <div class="s1-wish">
+      <span class="typing-line" style="--td:2.5s;--st:40;--del:0.3s;display:inline-block">
+        🎂 Khendi, amar priyo manus — 
+      </span><br>
+      <span class="typing-line" style="--td:2.5s;--st:38;--del:3.2s;display:inline-block">
+        Tomar Sob swapno Puron Hok,Keep Shining 🎉
+      </span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Ocean Love Letter -->
+  <div class="slide" id="s2">
+    <div class="s2-envelope">💌</div>
+    <div class="s2-title">Penchi</div>
+    <div class="s2-poem">
+      <span class="typing-line" style="--td:2s;--st:35;--del:0.3s;display:block">Sarajibon Valo Theko 🌊</span>
+      <span class="typing-line" style="--td:2s;--st:30;--del:2.7s;display:block">Sukhe Theko, Hansi khusi Theko💙</span>
+      <span class="typing-line" style="--td:2s;--st:38;--del:5.1s;display:block">Jiboner Sob Swapno Puron Hok🐚</span>
+      <span class="typing-line" style="--td:2s;--st:30;--del:7.5s;display:block">achieve your all wishes as soon as possible ⚓</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Neon Galaxy -->
+  <div class="slide" id="s3">
+    <div class="s3-planet">🌌</div>
+    <div class="s3-title">Thonthfuli</div>
+    <div class="s3-text">
+      <span class="typing-line" style="--td:2.5s;--st:40;--del:0.5s;display:block">
+        Thonthfuli name ta mone achhe to? ✨
+      </span>
+      <span class="typing-line" style="--td:2.5s;--st:38;--del:3.4s;display:block">
+        Akhono Oi Thonthfuli Ovves ta khub valo lage 🌟
+      </span>
+      <span class="typing-line" style="--td:2.5s;--st:42;--del:6.3s;display:block">
+        Ota te tomay valo lage, (Amar Deoa Name😊😘)  💫
+      </span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Cherry Blossom -->
+  <div class="slide" id="s4">
+    <div class="s4-top">The Caring Person🌸</div>
+    <div class="s4-poem">
+      <span class="typing-line" style="--td:2.2s;--st:32;--del:0.4s;display:block">Tumi Amar life ey dakha most Caring Person —</span>
+      <span class="typing-line" style="--td:2.2s;--st:34;--del:3s;display:block">Amar Prottek ta Jinis ey amar mayer moto care koro  🌷</span>
+      <span class="typing-line" style="--td:2.2s;--st:36;--del:5.6s;display:block">Eta Sob theke amar valo lage</span>
+      <span class="typing-line" style="--td:2.2s;--st:30;--del:8.2s;display:block">Vul korle boko,rag koro eta sob cheye valo lage 💖</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Emerald Forest -->
+  <div class="slide" id="s5">
+    <div class="s5-icon">🌿</div>
+    <div class="s5-title">Always Amar Pashe</div>
+    <div class="s5-text">
+      <span class="typing-line" style="--td:2.5s;--st:38;--del:0.4s;display:block">Jotoi Jhogra ragaragi jai hok tumi amar pase sob sosmoy achho🌳</span>
+      <span class="typing-line" style="--td:2.5s;--st:36;--del:3.3s;display:block">Amio Tomar Pashe Royechhi 🍃</span>
+      <span class="typing-line" style="--td:2.5s;--st:40;--del:6.2s;display:block">Kotha na hole Sotti kamon akta faka faka lage 💚</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Sunset Paradise -->
+  <div class="slide" id="s6">
+    <div class="s6-sun">🌅</div>
+    <div class="s6-title">Protidin Tomar Shaathe</div>
+    <div class="s6-text">
+      <span class="typing-line" style="--td:2.3s;--st:38;--del:0.3s;display:block">Shokale tomar Good Morning diye din ta shuru hoy 🌄</span>
+      <span class="typing-line" style="--td:2.3s;--st:34;--del:3s;display:block">Saradin ki korchhi na korchhi sober kheyal rakha,jhogra</span>
+      <span class="typing-line" style="--td:2.3s;--st:34;--del:3s;display:block">sobkichhu Niyei Besh Sundor chole 🌇</span>
+      <span class="typing-line" style="--td:2.3s;--st:38;--del:5.7s;display:block">Raat e Tomar Good Night diye din Sesh Hoy 🌙</span>
+     
+    </div>
+  </div>
+
+
+  <!-- SLIDE 4: Cherry Blossom -->
+  <div class="slide" id="s7">
+    <div class="s7-name">Tumhare Liye🌸</div>
+    <div class="s4-poem">
+      <span class="s7-name" style="--td:2.2s;--st:32;--del:0.4s;display:block">Tomar Pashe Sobsomoy achhi Thakbo —</span>
+      
+      
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Final Love Forever -->
+  <div class="slide" id="s7">
+    <div class="s7-heart">💖</div>
+    <div class="s7-name">Khendi</div>
+    <div class="s7-forever typing-line" style="--td:3s;--st:14;--del:0.8s">
+      Forever &amp; Always
+    </div>
+    <div class="s7-sign typing-line" style="--td:2.5s;--st:30;--del:4.5s">
+      — Tomar jonno, shob shomoy, shob khane 🌙💕
+      
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS & DOTS -->
+<div id="progress-bar" style="width:0%"></div>
+<div id="dots"></div>
+
+<script>
+// ===== CONFIG =====
+const TOTAL = 8;
+const DURATION = 10000; // 10s per slide
+
+// ===== DOTS =====
+const dotsEl = document.getElementById('dots');
+for(let i=0;i<TOTAL;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' active':'');
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+}
+
+// ===== PROGRESS =====
+const bar=document.getElementById('progress-bar');
+let progressTimer=null,progressStart=null;
+function startProgress(){
+  clearInterval(progressTimer);
+  progressStart=Date.now();
+  bar.style.transition='none';bar.style.width='0%';
+  requestAnimationFrame(()=>{
+    bar.style.transition='width '+DURATION+'ms linear';
+    bar.style.width='100%';
+  });
+}
+
+// ===== SLIDE CONTROL =====
+let current=0,timer=null;
+const slides=document.querySelectorAll('.slide');
+
+function goTo(n){
+  // cleanup current
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  const old=current;
+  setTimeout(()=>{slides[old].classList.remove('exit')},1100);
+  dotsEl.children[current].classList.remove('active');
+
+  current=n%TOTAL;
+  slides[current].classList.add('active');
+  dotsEl.children[current].classList.add('active');
+
+  // re-trigger typing animations
+  const typings=slides[current].querySelectorAll('.typing-line');
+  typings.forEach(t=>{
+    t.classList.remove('done');
+    t.style.animation='none';
+    void t.offsetWidth;
+    t.style.animation='';
+  });
+
+  // fire theme FX
+  clearAllFX();
+  themeFX(current);
+
+  startProgress();
+  clearTimeout(timer);
+  timer=setTimeout(()=>goTo(current+1),DURATION);
+}
+
+// ===== BACKGROUND STAR CANVAS =====
+const bgC=document.getElementById('bgCanvas');
+const bgX=bgC.getContext('2d');
+let W,H,bgStars=[];
+function resizeBg(){
+  W=bgC.width=fxC.width=window.innerWidth;
+  H=bgC.height=fxC.height=window.innerHeight;
+}
+const fxC=document.getElementById('fxCanvas');
+const fxX=fxC.getContext('2d');
+resizeBg();
+window.addEventListener('resize',resizeBg);
+
+for(let i=0;i<220;i++) bgStars.push({
+  x:Math.random(),y:Math.random(),
+  r:Math.random()*1.8+0.2,
+  a:Math.random(),da:Math.random()*0.008+0.002
+});
+
+function drawBg(){
+  const s=slides[current];
+  const bg=getComputedStyle(s).background;
+  bgX.clearRect(0,0,W,H);
+  bgStars.forEach(s=>{
+    s.a+=s.da;
+    if(s.a>1||s.a<0)s.da*=-1;
+    bgX.beginPath();
+    bgX.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);
+    bgX.fillStyle=`rgba(255,230,255,${s.a*0.7})`;
+    bgX.fill();
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ===== THEME FX =====
+const fxEls=[];
+
+function clearAllFX(){
+  fxEls.forEach(e=>e&&e.remove&&e.remove());
+  fxEls.length=0;
+}
+
+function addEl(html,parent=document.body){
+  const d=document.createElement('div');
+  d.innerHTML=html;const el=d.firstChild;
+  parent.appendChild(el);fxEls.push(el);
+  return el;
+}
+
+function themeFX(idx){
+  if(idx===0) fxRose();
+  else if(idx===1) fxGold();
+  else if(idx===2) fxOcean();
+  else if(idx===3) fxGalaxy();
+  else if(idx===4) fxCherry();
+  else if(idx===5) fxForest();
+  else if(idx===6) fxSunset();
+  else if(idx===7) fxFinal();
+}
+
+// SLIDE 0 — Rose petals + balloons
+function fxRose(){
+  const petals=['🌹','🌺','🌸','💮'];
+  for(let i=0;i<18;i++){
+    setTimeout(()=>{
+      const p=document.createElement('div');
+      p.className='petal';
+      p.textContent=petals[Math.floor(Math.random()*petals.length)];
+      p.style.left=Math.random()*100+'vw';
+      p.style.animationDuration=(6+Math.random()*8)+'s';
+      p.style.animationDelay=(Math.random()*4)+'s';
+      p.style.fontSize=(1+Math.random()*1.2)+'rem';
+      document.body.appendChild(p);fxEls.push(p);
+      setTimeout(()=>p.remove(), 14000);
+    }, i*400);
+  }
+  spawnBalloons(8);
+}
+
+// SLIDE 1 — Gold sparkles + confetti burst
+function fxGold(){
+  const sparkleEmojis=['✨','⭐','🌟','💛','🎁','🎊'];
+  const burst=()=>{
+    for(let i=0;i<8;i++){
+      const s=document.createElement('div');
+      s.className='sparkle';
+      s.textContent=sparkleEmojis[Math.floor(Math.random()*sparkleEmojis.length)];
+      s.style.left=Math.random()*100+'vw';
+      s.style.top=Math.random()*80+'vh';
+      s.style.animationDuration=(0.8+Math.random()*1)+'s';
+      document.body.appendChild(s);fxEls.push(s);
+      setTimeout(()=>s.remove(),2000);
+    }
+  };
+  burst();
+  const iv=setInterval(burst,800);fxEls.push({remove:()=>clearInterval(iv)});
+  spawnConfetti();
+}
+
+// SLIDE 2 — Bubbles
+function fxOcean(){
+  for(let i=0;i<20;i++){
+    const b=document.createElement('div');
+    b.className='bubble';
+    const sz=20+Math.random()*60;
+    b.style.width=b.style.height=sz+'px';
+    b.style.left=Math.random()*100+'vw';
+    b.style.animationDuration=(8+Math.random()*10)+'s';
+    b.style.animationDelay=(Math.random()*5)+'s';
+    document.body.appendChild(b);fxEls.push(b);
+  }
+  spawnHearts(['💙','🌊','🐚','🌀'],10);
+}
+
+// SLIDE 3 — Meteors + stars
+function fxGalaxy(){
+  const shootMeteor=()=>{
+    const m=document.createElement('div');
+    m.className='meteor';
+    m.style.top=Math.random()*50+'vh';
+    m.style.left=Math.random()*80+'vw';
+    m.style.width=(80+Math.random()*120)+'px';
+    m.style.transform='rotate(-25deg)';
+    m.style.animationDuration=(0.6+Math.random()*0.8)+'s';
+    document.body.appendChild(m);fxEls.push(m);
+    setTimeout(()=>m.remove(),2000);
+  };
+  shootMeteor();
+  const iv=setInterval(shootMeteor,700);fxEls.push({remove:()=>clearInterval(iv)});
+  spawnHearts(['💫','🌠','⭐','✨','🌌'],12);
+}
+
+// SLIDE 4 — Sakura
+function fxCherry(){
+  for(let i=0;i<20;i++){
+    setTimeout(()=>{
+      const s=document.createElement('div');
+      s.className='sakura';
+      s.textContent=['🌸','🌷','🌺','💮','🌹'][Math.floor(Math.random()*5)];
+      s.style.left=Math.random()*100+'vw';
+      s.style.setProperty('--sx',(Math.random()*120-60)+'px');
+      s.style.animationDuration=(7+Math.random()*8)+'s';
+      s.style.animationDelay=(Math.random()*3)+'s';
+      document.body.appendChild(s);fxEls.push(s);
+      setTimeout(()=>s.remove(),16000);
+    },i*350);
+  }
+  spawnHearts(['💖','💝','💗','💓'],8);
+}
+
+// SLIDE 5 — Leaves
+function fxForest(){
+  for(let i=0;i<18;i++){
+    setTimeout(()=>{
+      const l=document.createElement('div');
+      l.className='leaf-float';
+      l.textContent=['🍃','🌿','🍀','🌱','🌾'][Math.floor(Math.random()*5)];
+      l.style.left=Math.random()*100+'vw';
+      l.style.setProperty('--lx',(Math.random()*80-40)+'px');
+      l.style.animationDuration=(7+Math.random()*8)+'s';
+      l.style.animationDelay=(Math.random()*4)+'s';
+      document.body.appendChild(l);fxEls.push(l);
+      setTimeout(()=>l.remove(),16000);
+    },i*400);
+  }
+  spawnHearts(['💚','🌿','🍀'],6);
+}
+
+// SLIDE 6 — Fireflies
+function fxSunset(){
+  for(let i=0;i<22;i++){
+    const f=document.createElement('div');
+    f.className='firefly';
+    f.style.left=Math.random()*100+'vw';
+    f.style.top=Math.random()*100+'vh';
+    f.style.setProperty('--fx',(Math.random()*120-60)+'px');
+    f.style.setProperty('--fy',(Math.random()*120-60)+'px');
+    f.style.animationDuration=(2+Math.random()*4)+'s';
+    f.style.animationDelay=(Math.random()*3)+'s';
+    document.body.appendChild(f);fxEls.push(f);
+  }
+  spawnHearts(['🔥','🌅','✨','🌟'],8);
+}
+
+// SLIDE 7 — Full party
+function fxFinal(){
+  spawnBalloons(14);
+  spawnConfetti();
+  spawnHearts(['💖','💕','💗','💓','💝','🌸','✨','💞'],16);
+  // big burst
+  setTimeout(()=>{
+    for(let i=0;i<25;i++){
+      const s=document.createElement('div');
+      s.className='sparkle';
+      s.textContent=['💖','✨','🌟','💫','🎊','🎉'][Math.floor(Math.random()*6)];
+      s.style.left=Math.random()*100+'vw';
+      s.style.top=Math.random()*80+'vh';
+      s.style.animationDuration=(1+Math.random()*1.5)+'s';
+      s.style.animationDelay=(Math.random()*2)+'s';
+      document.body.appendChild(s);fxEls.push(s);
+      setTimeout(()=>s.remove(),4000);
+    }
+  },500);
+}
+
+// ===== SHARED HELPERS =====
+const balloonColors=['#ff6b9d','#ff9ff3','#ffca3a','#6bcb77','#4d96ff','#c77dff','#ff4d6d','#74efc9'];
+function spawnBalloons(count){
+  for(let i=0;i<count;i++){
+    setTimeout(()=>{
+      const w=document.createElement('div');
+      w.style.cssText=`position:fixed;bottom:-160px;left:${5+Math.random()*90}%;z-index:5;animation:floatUp ${6+Math.random()*6}s linear forwards`;
+      const b=document.createElement('div');
+      const c=balloonColors[Math.floor(Math.random()*balloonColors.length)];
+      b.style.cssText=`width:55px;height:70px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:${c};box-shadow:inset -6px -6px 15px rgba(0,0,0,0.2);position:relative`;
+      b.innerHTML=`<div style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);width:1.5px;height:16px;background:rgba(255,255,255,0.5)"></div>`;
+      const str=document.createElement('div');
+      str.style.cssText='width:1px;height:70px;background:rgba(255,255,255,0.35);margin:0 auto';
+      w.appendChild(b);w.appendChild(str);
+      document.body.appendChild(w);fxEls.push(w);
+      w.addEventListener('animationend',()=>w.remove());
+    },i*500+Math.random()*300);
+  }
+}
+
+const confC=['#ff6b9d','#ffe066','#74efc9','#4d96ff','#ff9ff3','#c77dff','#ffca3a','#6bcb77'];
+function spawnConfetti(){
+  const drop=()=>{
+    for(let i=0;i<10;i++){
+      const p=document.createElement('div');
+      p.style.cssText=`position:fixed;top:-12px;left:${Math.random()*100}vw;width:${8+Math.random()*8}px;height:${8+Math.random()*8}px;background:${confC[Math.floor(Math.random()*confC.length)]};border-radius:${Math.random()>0.5?'50%':'3px'};z-index:20;animation:confettiFall ${2.5+Math.random()*4}s linear forwards`;
+      p.style.setProperty('--drift',(Math.random()*200-100)+'px');
+      document.body.appendChild(p);fxEls.push(p);
+      p.addEventListener('animationend',()=>p.remove());
+    }
+  };
+  drop();
+  const iv=setInterval(drop,600);fxEls.push({remove:()=>clearInterval(iv)});
+}
+
+function spawnHearts(pool,count){
+  for(let i=0;i<count;i++){
+    setTimeout(()=>{
+      const h=document.createElement('div');
+      h.style.cssText=`position:fixed;bottom:0;left:${5+Math.random()*90}vw;font-size:${1.2+Math.random()*1}rem;z-index:6;animation:heartRise ${4+Math.random()*6}s linear forwards`;
+      h.textContent=pool[Math.floor(Math.random()*pool.length)];
+      document.body.appendChild(h);fxEls.push(h);
+      h.addEventListener('animationend',()=>h.remove());
+    },i*500+Math.random()*400);
+  }
+}
+
+// ===== KEYFRAMES via JS =====
+const style=document.createElement('style');
+style.textContent=`
+@keyframes floatUp{0%{bottom:-160px;opacity:0}10%{opacity:1}90%{opacity:1}100%{bottom:110%;opacity:0}}
+@keyframes heartRise{0%{opacity:0;transform:translateY(0) scale(0.5)}20%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translateY(-80vh) scale(1.2)}}
+@keyframes confettiFall{0%{top:-12px;opacity:1;transform:rotate(0) translateX(0)}100%{top:110vh;opacity:0;transform:rotate(720deg) translateX(var(--drift))}}
+`;
+document.head.appendChild(style);
+
+// ===== START =====
+themeFX(0);
+startProgress();
+timer=setTimeout(()=>goTo(1),DURATION);
+</script>
+</body>
+</html>
